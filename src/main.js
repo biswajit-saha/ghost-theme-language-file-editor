@@ -221,18 +221,27 @@
     });
 
     downloadBtn.addEventListener('click', () => {
-      if (!currentProjectKey) return;
-      const p = projects[currentProjectKey];
-      const blob = new Blob([JSON.stringify(p.translations, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${p.langCode}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    });
+  if (!currentProjectKey) return;
+  const p = projects[currentProjectKey];
+  const result = {};
+
+  // Merge translations with originals
+  Object.keys(p.originalStrings).forEach(key => {
+    result[key] = p.translations[key] && p.translations[key].trim() !== ''
+      ? p.translations[key]
+      : p.originalStrings[key];
+  });
+
+  const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${p.langCode}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
 
     // Initialization
     updateProjectSelect();
