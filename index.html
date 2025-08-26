@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ghost Theme Language File Editor</title>
+  <link href="/src/style.css" rel="stylesheet">
+</head>
+
+<body
+  class="h-screen flex flex-col font-sans bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 transition-colors">
+
+  <!-- Header -->
+  <header
+    class="bg-white dark:bg-transparent border-b border-gray-300 dark:border-gray-700 flex items-center px-4 py-3 justify-between">
+    <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">Ghost theme language file editor</h1>
+    <div class="flex items-center space-x-4">
+      <select id="projectSelect"
+        class="px-3 h-10 border rounded-md text-gray-700 dark:text-gray-300 dark:bg-transparent text-sm hidden border-gray-300 dark:border-gray-700"></select>
+      <div id="projectInfoDisplay"
+        class="hidden bg-gray-100 dark:bg-transparent px-3 py-1 rounded-md text-gray-700 dark:text-gray-300 text-sm flex gap-2 items-center border border-gray-300 dark:border-gray-700">
+      </div>
+      <button id="deleteProjectBtn"
+        class="flex items-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 hover:bg-red-700 hover:text-white px-3 h-10 rounded-md hidden transition border border-gray-300 dark:border-gray-700 cursor-pointer">
+        <!-- icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h10" />
+        </svg>
+        Delete Project
+      </button>
+      <button id="createProjectBtn"
+        class="bg-slate-900 dark:bg-gray-700 text-white dark:text-gray-100 px-4 h-10 rounded-md hover:bg-slate-800 dark:hover:bg-gray-600 transition text-sm font-medium cursor-pointer">
+        Create new translation project
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <main
+    class="flex flex-1 overflow-hidden pb-12 bg-white dark:bg-transparent border-t border-gray-300 dark:border-gray-700">
+
+    <!-- Sidebar -->
+    <aside id="keys"
+      class="w-1/3 md:w-1/4 lg:w-1/3 overflow-y-auto p-3 space-y-1 border-r border-gray-200 dark:border-gray-700 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+      <!-- Keys dynamically inserted -->
+    </aside>
+
+
+    <!-- Editor -->
+    <section id="editor" class="flex-1 flex flex-col p-6 space-y-4 overflow-hidden bg-white dark:bg-transparent">
+      <div class="flex flex-col space-y-2">
+        <label for="original" class="block font-semibold">Original String</label>
+        <textarea id="original" readonly tabindex="-1" placeholder="Select a string from the list" class="w-full p-3 border rounded-md resize-none h-32 overflow-auto
+         bg-slate-50 dark:bg-gray-800
+         text-gray-600 dark:text-gray-300
+         border-gray-200 dark:border-gray-700
+         focus:outline-none focus:ring-1 focus:ring-slate-50 dark:focus:ring-slate-600">
+</textarea>
+      </div>
+      <div class="flex-1 flex flex-col space-y-2">
+        <label for="translation" class="block font-semibold">Translation</label>
+        <textarea id="translation" placeholder="Enter translation here..." disabled class="w-full flex-1 p-3 border rounded-md resize-none h-full
+         bg-slate-50 dark:bg-gray-800
+         text-gray-800 dark:text-gray-100
+         border-gray-200 dark:border-gray-700
+         focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-600">
+</textarea>
+      </div>
+      <div class="flex justify-between items-center mt-2 space-x-2">
+        <div class="flex space-x-2">
+          <button id="prevBtn"
+            class="flex items-center justify-center h-10 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition border border-gray-300 dark:border-gray-700 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+          </button>
+          <button id="nextBtn"
+            class="flex items-center justify-center h-10 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition border border-gray-300 dark:border-gray-700 cursor-pointer">
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+        <button id="downloadBtn" disabled
+          class="h-10 px-4 bg-slate-800 dark:bg-gray-700 text-white dark:text-gray-100 rounded-md hover:bg-slate-900 dark:hover:bg-gray-600 transition cursor-pointer">Download
+          Translation</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Create Project Modal -->
+  <!-- Modal -->
+  <div id="projectModal" class="fixed inset-0 bg-black/70 bg-opacity-70 flex items-center justify-center hidden z-50">
+    <div
+      class="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-md space-y-4 border border-gray-300 dark:border-gray-700">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Create New Translation Project</h2>
+      <input id="modalProjectName" type="text" placeholder="Project Name"
+        class="w-full p-3 border rounded-md text-gray-700 dark:text-gray-300 dark:bg-gray-800 focus:ring-2 focus:ring-slate-700 h-10 border-gray-300 dark:border-gray-600" />
+      <input id="modalLangCode" type="text" placeholder="Language Code (e.g. fr)"
+        class="w-full p-3 border rounded-md text-gray-700 dark:text-gray-300 dark:bg-gray-800 focus:ring-2 focus:ring-slate-700 h-10 border-gray-300 dark:border-gray-600" />
+      <input id="modalFileInput" type="file" accept=".json" class="w-full text-gray-700 border border-gray-300 rounded-md p-2 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" />
+      <p class="text-xs text-gray-500 dark:text-gray-400">Upload your <code>en.json</code> file for the project.</p>
+      <div class="flex justify-end gap-2 pt-2">
+        <button id="cancelModal"
+          class="px-4 h-10 bg-gray-200 dark:bg-gray-800 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition border border-gray-300 dark:border-gray-600 cursor-pointer">Cancel</button>
+        <button id="confirmCreate"
+          class="bg-slate-900 dark:bg-gray-700 text-white dark:text-gray-100 px-4 h-10 rounded-md hover:bg-slate-800 dark:hover:bg-gray-600 transition text-sm font-medium disabled:cursor-not-allowed cursor-pointer"
+          disabled>Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer
+    class="fixed bottom-0 left-0 right-0 flex justify-between items-center px-4 py-2 bg-white dark:bg-transparent border-t border-gray-300 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 z-40 h-12">
+    <button id="themeToggleBtn" aria-label="Toggle Dark/Light Mode"
+      class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer">
+      <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-200"
+        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-9h1M3.34 12h1m15.07 5.07l.7.7M4.93 4.93l.7.7m0 13.44l-.7.7M19.07 4.93l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z" />
+      </svg>
+    </button>
+    <p>
+      Created with AI (chat GPT) by <a href="https://github.com/biswajit-saha" target="_blank"
+        class="underline">Biswajit Saha</a>
+    </p>
+  </footer>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
