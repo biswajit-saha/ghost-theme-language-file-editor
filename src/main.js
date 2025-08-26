@@ -149,18 +149,74 @@
       if (confirm(`Delete project "${projects[currentProjectKey].projectName}"? This cannot be undone.`)) {
         delete projects[currentProjectKey];
         persistProjects();
-        currentProjectKey = '';
-        localStorage.removeItem('lastProject');
-        updateProjectSelect();
-        keysEl.innerHTML = '';
-        translationArea.value = '';
-        originalEl.value = '';
-        translationArea.disabled = true;
-        selectedKey = null;
-        updateInfo();
-        downloadBtn.disabled =  Object.keys(projects).length === 0;
+        
+        const remainingProjects = Object.keys(projects);
+        if (remainingProjects.length > 0) {
+          // Auto-select the first remaining project
+          currentProjectKey = remainingProjects[0];
+          localStorage.setItem('lastProject', currentProjectKey);
+          keysList = Object.keys(projects[currentProjectKey].originalStrings);
+          updateProjectSelect();
+          updateInfo();
+          renderKeys();
+          translationArea.value = '';
+          originalEl.value = '';
+          translationArea.disabled = true;
+          selectedKey = null;
+          updateNavButtons();
+          downloadBtn.disabled = false;
+          projectSelect.value = currentProjectKey;
+        } else {
+          // No projects left
+          currentProjectKey = '';
+          localStorage.removeItem('lastProject');
+          updateProjectSelect();
+          keysEl.innerHTML = '';
+          translationArea.value = '';
+          originalEl.value = '';
+          translationArea.disabled = true;
+          selectedKey = null;
+          updateInfo();
+          deleteProjectBtn.addEventListener('click', () => {
+      if (!currentProjectKey) return;
+      if (confirm(`Delete project "${projects[currentProjectKey].projectName}"? This cannot be undone.`)) {
+        delete projects[currentProjectKey];
+        persistProjects();
+        
+        const remainingProjects = Object.keys(projects);
+        if (remainingProjects.length > 0) {
+          // Auto-select the first remaining project
+          currentProjectKey = remainingProjects[0];
+          localStorage.setItem('lastProject', currentProjectKey);
+          keysList = Object.keys(projects[currentProjectKey].originalStrings);
+          updateProjectSelect();
+          updateInfo();
+          renderKeys();
+          translationArea.value = '';
+          originalEl.value = '';
+          translationArea.disabled = true;
+          selectedKey = null;
+          updateNavButtons();
+          downloadBtn.disabled = false;
+          projectSelect.value = currentProjectKey;
+        } else {
+          // No projects left
+          currentProjectKey = '';
+          localStorage.removeItem('lastProject');
+          updateProjectSelect();
+          keysEl.innerHTML = '';
+          translationArea.value = '';
+          originalEl.value = '';
+          translationArea.disabled = true;
+          selectedKey = null;
+          updateInfo();
+          downloadBtn.disabled = true;
+        }
       }
     });
+    }
+  }
+});
 
     createProjectBtn.addEventListener('click', () => {
       projectModal.classList.remove('hidden');
