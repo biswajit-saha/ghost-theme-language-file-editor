@@ -19,3 +19,7 @@ A **simple web-based UI** to easily translate Ghost theme language files. Upload
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Credit
+
+This project is built using Chat GPT to do almost everything. Vite setup, file structure and very small edit is done by human.
