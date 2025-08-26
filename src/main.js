@@ -142,7 +142,6 @@
       translationArea.disabled = true;
       selectedKey = null;
       updateNavButtons();
-      downloadBtn.disabled = true;
     });
 
     deleteProjectBtn.addEventListener('click', () => {
@@ -159,7 +158,7 @@
         translationArea.disabled = true;
         selectedKey = null;
         updateInfo();
-        downloadBtn.disabled = true;
+        downloadBtn.disabled =  Object.keys(projects).length === 0;
       }
     });
 
@@ -221,27 +220,27 @@
     });
 
     downloadBtn.addEventListener('click', () => {
-  if (!currentProjectKey) return;
-  const p = projects[currentProjectKey];
-  const result = {};
+      if (!currentProjectKey) return;
+      const p = projects[currentProjectKey];
+      const result = {};
 
-  // Merge translations with originals
-  Object.keys(p.originalStrings).forEach(key => {
-    result[key] = p.translations[key] && p.translations[key].trim() !== ''
-      ? p.translations[key]
-      : p.originalStrings[key];
-  });
+      // Merge translations with originals
+      Object.keys(p.originalStrings).forEach(key => {
+        result[key] = p.translations[key] && p.translations[key].trim() !== ''
+          ? p.translations[key]
+          : p.originalStrings[key];
+      });
 
-  const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${p.langCode}.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-});
+      const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${p.langCode}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
 
     // Initialization
     updateProjectSelect();
@@ -253,7 +252,7 @@
       translationArea.disabled = true;
       selectedKey = null;
       updateNavButtons();
-      downloadBtn.disabled = true;
+      downloadBtn.disabled = false;
     } else {
       projectSelect.value = '';
       translationArea.disabled = true;
